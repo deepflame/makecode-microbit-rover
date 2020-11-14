@@ -1,0 +1,21 @@
+{
+    "name": "microbit-rover",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "Rover": "github:freenove/makecode-extension-rover#v1.0.7"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+}
