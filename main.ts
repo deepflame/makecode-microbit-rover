@@ -1,70 +1,36 @@
-input.onButtonPressed(Button.A, function () {
-    radio.sendString("left")
-    basic.showLeds(`
-        . . # . .
-        . # . . .
-        # . # # #
-        . # . . .
-        . . # . .
-        `)
-    basic.pause(500)
-    basic.clearScreen()
-})
-input.onButtonPressed(Button.AB, function () {
-    radio.sendString("straight")
-    basic.showLeds(`
-        . . # . .
-        . # . # .
-        # . # . #
-        . . # . .
-        . . # . .
-        `)
-    basic.pause(500)
-    basic.clearScreen()
-})
-radio.onReceivedString(function (receivedString) {
-    if (receivedString == "left") {
-        Rover.MotorRunDual(0, 50)
-        basic.showLeds(`
-            . . # . .
-            . # . . .
-            # . # # #
-            . # . . .
-            . . # . .
-            `)
-    } else if (receivedString == "right") {
-        Rover.MotorRunDual(50, 0)
-        basic.showLeds(`
-            . . # . .
-            . . . # .
-            # # # . #
-            . . . # .
-            . . # . .
-            `)
-    } else if (receivedString == "straight") {
-        Rover.MotorRunDual(50, 50)
-        basic.showLeds(`
-            . . # . .
-            . # . # .
-            # . # . #
-            . . # . .
-            . . # . .
-            `)
+basic.forever(function () {
+    if (Rover.LineTracking() == 0) {
+        Rover.Move(100)
     }
-    basic.pause(500)
-    basic.clearScreen()
-    Rover.MotorStopAll(MotorActions.Stop)
+    // links
+    if (Rover.LineTracking() & 0b00000001) {
+        Rover.MotorRunDual(-50, 0)
+        pause(1200)
+    }
+    // rechts
+    if (Rover.LineTracking() & 0b00000100) {
+        Rover.MotorRunDual(0, -50)
+        pause(1200)
+    }
+    // links, mitte
+    if (Rover.LineTracking() & 0b00000001 && Rover.LineTracking() & 0b0000010) {
+        Rover.Move(-50)
+        pause(600)
+Rover.MotorRunDual(-50, 0)
+        pause(1200)
+    }
+    // rechts, mitte
+    if (Rover.LineTracking() & 0b0000010 && Rover.LineTracking() & 0b0000100) {
+        Rover.Move(-50)
+        pause(600)
+Rover.MotorRunDual(0, -50)
+        pause(1200)
+    }
+    // alle
+    if (Rover.LineTracking() & 0b00000001 && Rover.LineTracking() & 0b0000010 && Rover.LineTracking() & 0b0000100) {
+        Rover.Move(-100)
+        pause(600)
+Rover.MotorRunDual(50, -50)
+        pause(1200)
+    }
 })
-input.onButtonPressed(Button.B, function () {
-    radio.sendString("right")
-    basic.showLeds(`
-        . . # . .
-        . . . # .
-        # # # . #
-        . . . # .
-        . . # . .
-        `)
-    basic.pause(500)
-    basic.clearScreen()
-})
-radio.setGroup(7)
